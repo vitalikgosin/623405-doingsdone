@@ -1,7 +1,7 @@
 # Личный проект «Дела в Порядке»
 
 * Студент: [Vitaly Gosin](https://up.htmlacademy.ru/php/6/user/623405).
-* Наставник: `Неизвестно`.
+* Наставник: [Илья Кондрашов](https://htmlacademy.ru/profile/id644427).
 
 ---
 
