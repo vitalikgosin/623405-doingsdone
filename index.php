@@ -134,7 +134,7 @@ $arr_tasks = [
                       $category = $item['category'];
                       $done = $item['done'];
                       if ($done == 'Да') {$addclass = 'task--completed';}
-                      if ($done == 'Да' && $show_complete_tasks == 1){
+                      if ($done == 'Да' && $show_complete_tasks == 0){
                           continue;
                       }
 
