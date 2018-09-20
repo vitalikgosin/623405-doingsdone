@@ -169,6 +169,7 @@ $arr_tasks = [
                         <td class="task__date"><?= $date ?></td>
                     </tr>
                     <?php }?>
+
                     <!--показывать следующий тег <tr/>, если переменная $show_complete_tasks равна единице-->
                     <?php if ($show_complete_tasks): ?>
                         <tr class="tasks__item task task--completed">
