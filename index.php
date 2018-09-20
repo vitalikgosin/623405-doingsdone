@@ -1,7 +1,7 @@
 <?php
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
-$arr_projects = ['Входящие', 'Учеба', 'Работа', 'Домашние', 'дела', 'Авто'];
+$arr_projects = ['Входящие', 'Учеба', 'Работа', 'Домашние дела', 'Авто'];
 $arr_tasks = [
         [
             'task' => 'Собеседование в IT компании',
@@ -18,7 +18,7 @@ $arr_tasks = [
         [
             'task' => 'Сделать задание первого раздела',
             'date' => '21.12.2018',
-            'category' =>  'Учеба8',
+            'category' =>  'Учеба',
             'done' => 'Да',
         ],
         [
@@ -42,6 +42,14 @@ $arr_tasks = [
 
 
         ];
+function count_tasks( $project_name, $arr_tasks){
+    $count_task = 0;
+foreach ($arr_tasks as $projects){
+    //var_dump($projects);
+    if ( $project_name  === $projects['category'] ) $count_task++;
+}
+return $count_task;
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -87,12 +95,12 @@ $arr_tasks = [
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                        <?php foreach ($arr_projects as $key =>  $item) {
+                        <?php foreach ($arr_projects as  $project) {
 
                         ?>
                         <li class="main-navigation__list-item">
-                            <a class="main-navigation__list-item-link" href="#"><?= $item ?></a>
-                            <span class="main-navigation__list-item-count">0</span>
+                            <a class="main-navigation__list-item-link" href="#"><?= $project ?></a>
+                            <span class="main-navigation__list-item-count"><?= count_tasks( $project, $arr_tasks)?></span>
                         </li>
                         <?php }?>
                     </ul>
