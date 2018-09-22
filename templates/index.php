@@ -41,13 +41,18 @@ $show_complete_tasks = rand(0, 1);
 
 
                 <table class="tasks">
-                    <?php foreach ($arr_tasks as $items =>  $item) {$task = $item['task'];
-                        $addclass = '';
-                      $date = $item['date'];
-                      $task = $item['task'];
-                      $category = $item['category'];
-                      $done = $item['done'];
-                      if ($done == 'Да') {$addclass = 'task--completed';}
+                    <?php foreach ($arr_tasks as $items =>  $item) {
+
+                          $task = $item['task'];
+                          $addclass = '';
+                          $date = $item['date'];
+                          $task = $item['task'];
+                          $category = $item['category'];
+                          $done = $item['done'];
+
+                      if ($done == 'Да') {
+                          $addclass = 'task--completed';
+                      }
                       if ($done == 'Да' && $show_complete_tasks == 0){
                           continue;
                       }
