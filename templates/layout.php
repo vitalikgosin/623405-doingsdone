@@ -2,7 +2,7 @@
 // показывать или нет выполненные задачи
 
 
-function count_tasks( $project_name, $arr_tasks){
+function count_tasks( $project_name, array $arr_tasks){
     $count_task = 0;
     foreach ($arr_tasks as $projects){
         //var_dump($projects);
