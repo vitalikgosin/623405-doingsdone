@@ -16,3 +16,5 @@ function include_template($name, $data) {
 
     return $result;
 }
+
+
