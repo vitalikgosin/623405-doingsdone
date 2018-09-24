@@ -58,8 +58,8 @@ $show_complete_tasks = rand(0, 1);
                       }
 
                         $curr_date = strtotime("now");
-                        $task_date = strtotime("$date");
-                        $number = floor(2.54);
+                        $task_date = strtotime($date);
+
                         $day_num = strtotime('1 day 30 second', 0);
                         $highlight_date =  $task_date - $curr_date;
 
@@ -75,7 +75,7 @@ $show_complete_tasks = rand(0, 1);
 
 
                     ?>
-                    <tr class="tasks__item task <?=$addclass, $task_important?>">
+                    <tr class="tasks__item task <?=$addclass, ' ', $task_important?>">
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
                                 <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
