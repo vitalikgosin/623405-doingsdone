@@ -103,4 +103,4 @@ $show_complete_tasks = rand(0, 1);
                         </tr>
                     <?php endif; ?>
                 </table>
-            </main>
+        
