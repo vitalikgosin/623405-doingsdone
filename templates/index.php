@@ -63,14 +63,10 @@ $show_complete_tasks = rand(0, 1);
                         $day_num = strtotime('1 day 30 second', 0);
                         $highlight_date =  $task_date - $curr_date;
 
-                        if ($task_date) {
+                        if ($task_date && $highlight_date < $day_num) {
 
-                            if ($highlight_date < $day_num) {
-                                $task_important = 'task--important';
-                            }
-                            else{
-                                $task_important = ' ';
-                            }
+                              $addclass .= ' task--important';
+
                         }
 
 

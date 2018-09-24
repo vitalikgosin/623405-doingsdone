@@ -17,4 +17,5 @@ function include_template($name, $data) {
     return $result;
 }
 
+date_default_timezone_set('Europe/Moscow');
 
