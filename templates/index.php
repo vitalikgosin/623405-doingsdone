@@ -60,7 +60,7 @@ $show_complete_tasks = rand(0, 1);
                         $curr_date = strtotime("now");
                         $task_date = strtotime($date);
 
-                        $day_num = strtotime('1 day 30 second', 0);
+                        $day_num = 86400;
                         $highlight_date =  $task_date - $curr_date;
 
                         if ($task_date && $highlight_date < $day_num) {
