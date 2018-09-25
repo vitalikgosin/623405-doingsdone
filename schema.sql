@@ -4,25 +4,31 @@ CREATE DATABASE doingsdone
  DEFAULT COLLATE utf8_general_ci;
 
   CREATE TABLE project (
-  
-  author            CHAR(128),
+  id_project        INT AUTO_INCREMENT PRIMARY KEY,
+  id_user           INT
   );
 
   CREATE TABLE task (
-  id                INT AUTO_INCREMENT PRIMARY KEY,
+  id_task           INT AUTO_INCREMENT PRIMARY KEY,
+  id_user           INT,
+  id_project        INT,
   creation_date     DATE,
   execution_date    DATE,
   status            BOOLEAN  DEFAULT '0',
   project_name      CHAR(128),
   file_link         VARCHAR(512) CHARACTER SET 'ascii' COLLATE 'ascii_general_ci' NOT NULL,
-  date_for_task     DATE,
+  date_for_task     DATE
   );
 
   CREATE TABLE users (
-  id                INT AUTO_INCREMENT PRIMARY KEY,
+  id_user           INT AUTO_INCREMENT PRIMARY KEY,
   registration_date DATE,
   name              CHAR(128),
   email             CHAR(128) UNIQUE,
   password          CHAR(64),
-  contacts          CHAR(264),
+  contacts          VARCHAR(512)
   );
+
+CREATE INDEX email_i ON users(email);
+CREATE INDEX name_i ON users(name);
+CREATE INDEX project_i  ON task(project_name);
