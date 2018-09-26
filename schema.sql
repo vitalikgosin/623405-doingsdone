@@ -5,7 +5,8 @@ CREATE DATABASE doingsdone
 
   CREATE TABLE project (
   id_project        INT AUTO_INCREMENT PRIMARY KEY,
-  id_user           INT
+  id_user           INT,
+  project_name      CHAR(128)
   );
 
   CREATE TABLE task (
@@ -13,9 +14,9 @@ CREATE DATABASE doingsdone
   id_user           INT,
   id_project        INT,
   creation_date     DATE,
-  execution_date    DATE,
+  date_complete    DATE,
   status            BOOLEAN  DEFAULT '0',
-  project_name      CHAR(128),
+
   file_link         VARCHAR(512) CHARACTER SET 'ascii' COLLATE 'ascii_general_ci' NOT NULL,
   date_for_task     DATE
   );
@@ -29,6 +30,7 @@ CREATE DATABASE doingsdone
   contacts          VARCHAR(512)
   );
 
-CREATE INDEX email_i ON users(email);
+
 CREATE INDEX name_i ON users(name);
+CREATE INDEX user_id_i ON users(id_user);
 CREATE INDEX project_i  ON task(project_name);
