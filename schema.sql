@@ -32,5 +32,5 @@ CREATE DATABASE doingsdone
 
 
 CREATE INDEX name_i ON users(name);
-CREATE INDEX user_id_i ON users(id_user);
-CREATE INDEX project_i  ON task(project_name);
+CREATE INDEX project_i  ON task(id_project);
+CREATE INDEX id_user_i  ON task(task);
