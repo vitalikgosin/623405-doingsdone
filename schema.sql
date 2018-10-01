@@ -13,8 +13,9 @@ CREATE DATABASE doingsdone
   id_task           INT AUTO_INCREMENT PRIMARY KEY,
   id_user           INT,
   id_project        INT,
+  task_name        CHAR(128),
   creation_date     DATE,
-  date_complete     DATE,
+  complete_date     DATE,
   status            BOOLEAN  DEFAULT '0',
 
   file_link         VARCHAR(512) CHARACTER SET 'ascii' COLLATE 'ascii_general_ci' NOT NULL,
