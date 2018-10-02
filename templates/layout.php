@@ -2,16 +2,17 @@
 // показывать или нет выполненные задачи
 
 
-function count_tasks( $project_name, array $arr_tasks){
+function count_tasks( $project_id, array $arr_tasks){
     $count_task = 0;
     foreach ($arr_tasks as $projects){
         //var_dump($projects);
-        if ( $project_name  === $projects['category'] ){
+        if ( $project_id  === $projects['id_project'] ){
             $count_task++;
         }
     }
     return $count_task;
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -57,12 +58,12 @@ function count_tasks( $project_name, array $arr_tasks){
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                        <?php foreach ($arr_projects as  $project) {
+                        <?php foreach ($arr_projects as $project) {
 
                             ?>
                             <li class="main-navigation__list-item">
-                                <a class="main-navigation__list-item-link" href="#"><?= htmlspecialchars( $project) ?></a>
-                                <span class="main-navigation__list-item-count"><?= count_tasks( $project, $arr_tasks)?></span>
+                                <a class="main-navigation__list-item-link" href="#"><?= htmlspecialchars( $project['project_name']) ?></a>
+                                <span class="main-navigation__list-item-count"><?= count_tasks( $project['id_project'], $arr_tasks)?></span>
                             </li>
                         <?php }?>
                     </ul>
