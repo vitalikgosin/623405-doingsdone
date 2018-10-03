@@ -51,7 +51,7 @@ $show_complete_tasks = rand(0, 1);
                           $addclass = '';
                           $date = $item['date_for_task'];
                           
-                          $category = $item['id_project'];
+                          //$category = $item['id_project'];
                           $done = $item['status'];
 
                       if ($done == '1') {
