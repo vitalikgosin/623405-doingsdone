@@ -1,5 +1,6 @@
 <?php
-$show_complete_tasks = rand(0, 1);
+
+
 ?>
 
 
@@ -43,17 +44,17 @@ $show_complete_tasks = rand(0, 1);
                 <table class="tasks">
                     <?php foreach ($arr_tasks as $items =>  $item) {
 
-                          $task = $item['task'];
+                          $task_name = $item['task_name'];
                           $addclass = '';
-                          $date = $item['date'];
-                          $task = $item['task'];
-                          $category = $item['category'];
-                          $done = $item['done'];
+                          $date = $item['date_for_task'];
+                          
+                          //$category = $item['id_project'];
+                          $done = $item['status'];
 
-                      if ($done == 'Да') {
+                      if ($done == '1') {
                           $addclass = 'task--completed';
                       }
-                      if ($done == 'Да' && $show_complete_tasks == 0){
+                      if ($done == '1' && $show_complete_tasks == 0){
                           continue;
                       }
 
@@ -75,7 +76,7 @@ $show_complete_tasks = rand(0, 1);
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
                                 <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-                                <span class="checkbox__text"><?= htmlspecialchars($task)?></span>
+                                <span class="checkbox__text"><?= htmlspecialchars($task_name)?></span>
                             </label>
                         </td>
 

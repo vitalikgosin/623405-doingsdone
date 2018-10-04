@@ -74,16 +74,13 @@ contacts= 'russia';
 
 
 -- -----------------------------------------------get data
+SELECT * FROM project WHERE id_user = 2;
+SELECT task_name FROM task WHERE id_project = 2;
+UPDATE `task` SET `status` = '0' WHERE `task`.`id_task` = 1;
 
-SELECT task.task_name FROM task JOIN project
-ON project.id_user = users.id_user;
+SELECT * FROM task WHERE date_for_task = DATE_ADD(CURRENT_DATE(), INTERVAL 1 DAY);
 
-SELECT project.project_name FROM project JOIN task
-ON project.id_project = task.id_project;
+UPDATE `task` SET `task_name` = 'aaaa' WHERE `task`.`id_task` = 1;
 
-SELECT project.project_name FROM project JOIN task
-ON project.id_project = task.id_project;
-
-SELECT task.task_name FROM task WHERE DATE_ADD(date_for_task, INTERVAL 1 DAY) = DATE_ADD(CURRENT_DATE(), INTERVAL 1 DAY)
 
 
