@@ -8,8 +8,9 @@ $con = mysqli_connect("localhost", "root", "", "doingsdone");
 if ($con == false) {                  //---------- check connection
    print("Ошибка подключения: "
 . mysqli_connect_error());
+   die();
 }
-else {
+
    //print("Соединение установлено");
 
     mysqli_set_charset($con, "utf8");
@@ -46,12 +47,11 @@ else {
 
 // count
 
-    $sql_id_project_tasks ="SELECT project.project_name, COUNT(id_task) FROM task JOIN project ON task.id_project = project.id_project WHERE task.id_user=2  GROUP BY task.id_project;";
+    $sql_id_project_tasks ="SELECT project.project_name, COUNT(id_task) AS tasks_count FROM task JOIN project ON task.id_project = project.id_project WHERE task.id_user=2  GROUP BY task.id_project;";
 
     $qw_project_name_and_count = mysqli_query($con, $sql_id_project_tasks);
 
 
-}
 
 
 

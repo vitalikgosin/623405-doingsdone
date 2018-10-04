@@ -66,7 +66,7 @@ function count_tasks( $project_id, array $arr_tasks){
                             ?>
                             <li class="main-navigation__list-item">
                                 <a class="main-navigation__list-item-link" href="#"><?= htmlspecialchars( $project['project_name']) ?></a>
-                                <span class="main-navigation__list-item-count"><?= $project['COUNT(id_task)'] //count_tasks( $project['id_project'], $arr_tasks)?></span>
+                                <span class="main-navigation__list-item-count"><?= $project['tasks_count'] //count_tasks( $project['id_project'], $arr_tasks)?></span>
                             </li>
                         <?php }?>
                     </ul>
