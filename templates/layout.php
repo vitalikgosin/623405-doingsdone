@@ -1,7 +1,7 @@
 <?php
 // показывать или нет выполненные задачи
 
-
+/*
 function count_tasks( $project_id, array $arr_tasks){
     $count_task = 0;
     foreach ($arr_tasks as $projects){
@@ -12,6 +12,7 @@ function count_tasks( $project_id, array $arr_tasks){
     }
     return $count_task;
 }
+*/
 
 ?>
 <!DOCTYPE html>
@@ -62,6 +63,7 @@ function count_tasks( $project_id, array $arr_tasks){
                                 foreach ($arr_projects_and_count as $project){
                                    // var_dump($project['COUNT(id_task)']);
                                     /* foreach ($arr_projects as $project) {*/
+
 
                             ?>
                             <li class="main-navigation__list-item">
