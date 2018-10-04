@@ -66,9 +66,9 @@ if (!$qw_result_project_name_and_count) {                   //------ check resul
 
 
 
+$show_complete_tasks = rand(0, 1);
 
-
-$index_content = include_template('index.php', ['arr_tasks' => $rows_tasks]);
+$index_content = include_template('index.php', ['arr_tasks' => $rows_tasks, 'show_complete_tasks' => $show_complete_tasks]);
 
 
 $layout_content = include_template('layout.php',
