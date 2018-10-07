@@ -19,3 +19,5 @@ function include_template($name, $data) {
 
 date_default_timezone_set('Europe/Moscow');
 
+//------------------------------------------- show hide function
+$show_complete_tasks = rand(0, 1);

@@ -6,16 +6,16 @@ $con = mysqli_connect("localhost", "root", "", "doingsdone");
 
 
 if ($con == false) {                  //---------- check connection
-   print("Ошибка подключения: "
-. mysqli_connect_error());
-   die();
+    print("Ошибка подключения: "
+        . mysqli_connect_error());
+    die();
 }
 
-   //print("Соединение установлено");
+//print("Соединение установлено");
 
-    mysqli_set_charset($con, "utf8");
+mysqli_set_charset($con, "utf8");
 
- // print projects  
+// print projects
 /*
     $sql_projects ="SELECT * FROM project WHERE id_user = 2;";
     $result_projects = mysqli_query($con, $sql_projects);
@@ -27,33 +27,68 @@ if ($con == false) {                  //---------- check connection
         die();
         }
 
-    $rows_projects = mysqli_fetch_all($result_projects, MYSQLI_ASSOC); 
-    
+    $rows_projects = mysqli_fetch_all($result_projects, MYSQLI_ASSOC);
+
   */
 
-// print tasks
+
+//------------------------------------------------ links by project id
+
+if (isset($_GET['project_id'])) {
 
 
-    $sql_tasks ="SELECT * FROM task WHERE id_user = 2;";
-    
+    $project_id = $_GET['project_id'];
+
+
+
+
+
+    $sql_tasks = "SELECT * FROM task WHERE id_user = 2 AND id_project = '" . $project_id . "'";
     $result_tasks = mysqli_query($con, $sql_tasks);
 
-        if (!$result_tasks) {                   //------ check results
+    if (!$result_tasks) {                   //------ check results
         $error = mysqli_error($con);
         print("Ошибка MySQL: "
-        . $error);
+            . $error);
         die();
-        }
+    }
 
     $rows_tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
 
+
+    $index_content = include_template('index.php', ['arr_tasks' => $rows_tasks, 'show_complete_tasks' => $show_complete_tasks]);
+
+
+
+
+}
+else {
+
+
+// -------------------------------------------------print tasks
+
+
+    $sql_tasks ="SELECT * FROM task WHERE id_user = 2;";
+
+    $result_tasks = mysqli_query($con, $sql_tasks);
+
+    if (!$result_tasks) {                   //------ check results
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: "
+            . $error);
+        die();
+    }
+
+    $rows_tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
+}
+
 // count
 
-    $sql_id_project_tasks ="SELECT project.project_name, COUNT(id_task) AS tasks_count FROM task JOIN project ON task.id_project = project.id_project WHERE task.id_user=2  GROUP BY task.id_project;";
+$sql_id_project_tasks ="SELECT project.project_name, project.id_project, COUNT(id_task) AS tasks_count FROM task JOIN project ON task.id_project = project.id_project WHERE task.id_user=2  GROUP BY task.id_project;";
 
 //  SELECT project.project_name, group_concat(task.id_task) FROM task JOIN project ON task.id_project = project.id_project WHERE task.id_user=2  GROUP BY task.id_project;
 
-    $qw_result_project_name_and_count = mysqli_query($con, $sql_id_project_tasks);
+$qw_result_project_name_and_count = mysqli_query($con, $sql_id_project_tasks);
 
 if (!$qw_result_project_name_and_count) {                   //------ check results
     $error = mysqli_error($con);
@@ -62,11 +97,14 @@ if (!$qw_result_project_name_and_count) {                   //------ check resul
     die();
 }
 
-   $qw_project_name_and_count = mysqli_fetch_all($qw_result_project_name_and_count, MYSQLI_ASSOC);
+$qw_project_name_and_count = mysqli_fetch_all($qw_result_project_name_and_count, MYSQLI_ASSOC);
 
 
 
-$show_complete_tasks = rand(0, 1);
+
+
+
+//---------------------------------------------------- create arr data
 
 $index_content = include_template('index.php', ['arr_tasks' => $rows_tasks, 'show_complete_tasks' => $show_complete_tasks]);
 

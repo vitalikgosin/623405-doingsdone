@@ -60,14 +60,14 @@ function count_tasks( $project_id, array $arr_tasks){
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
                         <?php
-                                foreach ($arr_projects_and_count as $project){
-                                   // var_dump($project['COUNT(id_task)']);
-                                    /* foreach ($arr_projects as $project) {*/
+                        foreach ($arr_projects_and_count as $project){
+                            // var_dump($project['COUNT(id_task)']);
+                            /* foreach ($arr_projects as $project) {*/
 
 
                             ?>
                             <li class="main-navigation__list-item">
-                                <a class="main-navigation__list-item-link" href="#"><?= htmlspecialchars( $project['project_name']) ?></a>
+                                <a class="main-navigation__list-item-link" href="index.php?project_id=<?= htmlspecialchars( $project['id_project']) ?>"><?= htmlspecialchars( $project['project_name']) ?></a>
                                 <span class="main-navigation__list-item-count"><?= $project['tasks_count'] //count_tasks( $project['id_project'], $arr_tasks)?></span>
                             </li>
                         <?php }?>
