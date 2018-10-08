@@ -37,27 +37,23 @@ mysqli_set_charset($con, "utf8");
 if (isset($_GET['project_id'])) {
 
 
-    $project_id = $_GET['project_id'];
+       $project_id = (int)$_GET['project_id'];
 
 
+       $sql_tasks = "SELECT * FROM task WHERE id_user = 2 AND id_project = '" . $project_id . "'";
+       $result_tasks = mysqli_query($con, $sql_tasks);
+
+       if (!$result_tasks) {                   //------ check results
+           $error = mysqli_error($con);
+           print("Ошибка MySQL: "
+               . $error);
+           die();
+       }
+
+       $rows_tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
 
 
-
-    $sql_tasks = "SELECT * FROM task WHERE id_user = 2 AND id_project = '" . $project_id . "'";
-    $result_tasks = mysqli_query($con, $sql_tasks);
-
-    if (!$result_tasks) {                   //------ check results
-        $error = mysqli_error($con);
-        print("Ошибка MySQL: "
-            . $error);
-        die();
-    }
-
-    $rows_tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
-
-
-    $index_content = include_template('index.php', ['arr_tasks' => $rows_tasks, 'show_complete_tasks' => $show_complete_tasks]);
-
+       $index_content = include_template('index.php', ['arr_tasks' => $rows_tasks, 'show_complete_tasks' => $show_complete_tasks]);
 
 
 
@@ -81,6 +77,15 @@ else {
 
     $rows_tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
 }
+
+if ($_GET['project_id']=='' || empty( $rows_tasks)) {
+    //var_dump($_GET['project_id']);
+    echo '<h2>404</h2>';
+    http_response_code(404);
+    $rows_tasks=0;
+
+}
+
 
 // count
 
