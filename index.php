@@ -69,19 +69,17 @@ if (isset($_GET['project_id'])) {
     } else {
 
 
+        $index_content = include_template('index.php', ['arr_tasks' => $rows_tasks, 'show_complete_tasks' => $show_complete_tasks]);
 
-    $index_content = include_template('index.php', ['arr_tasks' => $rows_tasks, 'show_complete_tasks' => $show_complete_tasks]);
+    }
 
-}
-
-}
-else {
+} else {
 
 
 // -------------------------------------------------print tasks
 
 
-    $sql_tasks ="SELECT * FROM task WHERE id_user = 2;";
+    $sql_tasks = "SELECT * FROM task WHERE id_user = 2;";
 
     $result_tasks = mysqli_query($con, $sql_tasks);
 
@@ -99,11 +97,9 @@ else {
 }
 
 
-
-
 // count
 
-$sql_id_project_tasks ="SELECT project.project_name, project.id_project, COUNT(id_task) AS tasks_count FROM task JOIN project ON task.id_project = project.id_project WHERE task.id_user=2  GROUP BY task.id_project;";
+$sql_id_project_tasks = "SELECT project.project_name, project.id_project, COUNT(id_task) AS tasks_count FROM task JOIN project ON task.id_project = project.id_project WHERE task.id_user=2  GROUP BY task.id_project;";
 
 //  SELECT project.project_name, group_concat(task.id_task) FROM task JOIN project ON task.id_project = project.id_project WHERE task.id_user=2  GROUP BY task.id_project;
 
@@ -119,12 +115,7 @@ if (!$qw_result_project_name_and_count) {                   //------ check resul
 $qw_project_name_and_count = mysqli_fetch_all($qw_result_project_name_and_count, MYSQLI_ASSOC);
 
 
-
-
-
-
 //---------------------------------------------------- create arr data
-
 
 
 $layout_content = include_template('layout.php',
