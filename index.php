@@ -125,4 +125,6 @@ $layout_content = include_template('layout.php',
         'arr_projects_and_count' => $qw_project_name_and_count,
         'title' => 'Дела в порядке']);
 
+
+
 print($layout_content);
