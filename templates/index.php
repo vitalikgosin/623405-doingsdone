@@ -46,7 +46,7 @@
 
     <?php
 
-        if ($arr_tasks){
+
         foreach ($arr_tasks as $items =>  $item) {
 
             $task_name = $item['task_name'];
@@ -96,5 +96,5 @@
 
 
         <?php }
-     }?>
+     ?>
 </table>

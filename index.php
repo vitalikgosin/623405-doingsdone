@@ -33,29 +33,46 @@ mysqli_set_charset($con, "utf8");
 
 
 //------------------------------------------------ links by project id
-
+//var_dump(isset($_GET['project_id']));
+//var_dump($_GET['project_id']);
+//die();
 if (isset($_GET['project_id'])) {
 
 
-       $project_id = (int)$_GET['project_id'];
+    $project_id = (int)$_GET['project_id'];
+    //var_dump($project_id);
+    //die();
 
 
-       $sql_tasks = "SELECT * FROM task WHERE id_user = 2 AND id_project = '" . $project_id . "'";
-       $result_tasks = mysqli_query($con, $sql_tasks);
+    $sql_tasks = "SELECT * FROM task WHERE id_user = 2 AND id_project = '" . $project_id . "'";
+    $result_tasks = mysqli_query($con, $sql_tasks);
 
-       if (!$result_tasks) {                   //------ check results
-           $error = mysqli_error($con);
-           print("Ошибка MySQL: "
-               . $error);
-           die();
-       }
+    if (!$result_tasks) {                   //------ check results
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: "
+            . $error);
+        die();
+    }
 
-       $rows_tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
+    $rows_tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
+
+    if (empty($rows_tasks)) {
+        //var_dump($_GET['project_id']);
+
+        //var_dump(http_response_code(404));
+        //die();
+        //$rows_tasks=[];
+        http_response_code(404);
+        $index_content = 404;
 
 
-       $index_content = include_template('index.php', ['arr_tasks' => $rows_tasks, 'show_complete_tasks' => $show_complete_tasks]);
+    } else {
 
 
+
+    $index_content = include_template('index.php', ['arr_tasks' => $rows_tasks, 'show_complete_tasks' => $show_complete_tasks]);
+
+}
 
 }
 else {
@@ -76,15 +93,12 @@ else {
     }
 
     $rows_tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
-}
 
-if ($_GET['project_id']=='' || empty( $rows_tasks)) {
-    //var_dump($_GET['project_id']);
-    echo '<h2>404</h2>';
-    http_response_code(404);
-    $rows_tasks=0;
+    $index_content = include_template('index.php', ['arr_tasks' => $rows_tasks, 'show_complete_tasks' => $show_complete_tasks]);
 
 }
+
+
 
 
 // count
@@ -111,7 +125,6 @@ $qw_project_name_and_count = mysqli_fetch_all($qw_result_project_name_and_count,
 
 //---------------------------------------------------- create arr data
 
-$index_content = include_template('index.php', ['arr_tasks' => $rows_tasks, 'show_complete_tasks' => $show_complete_tasks]);
 
 
 $layout_content = include_template('layout.php',
