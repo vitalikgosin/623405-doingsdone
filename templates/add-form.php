@@ -9,8 +9,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
-  <link rel="stylesheet" href="../css/normalize.css">
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -87,7 +87,7 @@
           <div class="form__row">
             <label class="form__label" for="name">Название <sup>*</sup></label>
 
-            <input class="form__input" type="text" name="name" id="name" value="" placeholder="Введите название">
+            <input class="form__input <?= $error_class ?>" type="text" name="name" id="name" value="" placeholder="Введите название">
           </div>
 
           <div class="form__row">
@@ -95,10 +95,11 @@
 
             <select class="form__input form__input--select" name="project" id="project">
                 <?php
-                foreach ($arr_projects_and_count as $project){
 
+                foreach ($arr_projects_name as $project_name){
+                    var_dump($project_name);
                     ?>
-                    <option value=""><?=  $project['project_name']?></option>
+                    <option value=""><?=$project_name["project_name"]?></option>
 
 
                   <?php } ?>
@@ -123,7 +124,20 @@
             </div>
           </div>
 
-          <div class="form__row form__row--controls">
+
+            <?php if (isset($errors)): ?>
+                <div class="form__errors">
+                    <p>Пожалуйста, исправьте следующие ошибки:</p>
+                    <ul>
+                        <?php foreach($errors as $err => $val): ?>
+                            <li><strong><?=$dict[$err];?>:</strong> <?=$val;?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+
+
+            <div class="form__row form__row--controls">
             <input class="button" type="submit" name="" value="Добавить">
           </div>
         </form>

@@ -78,9 +78,6 @@ $layout_content = include_template('layout.php',
         'arr_projects_and_count' => $qw_project_name_and_count,
         'title' => 'Дела в порядке']);
 
-$add_content = include_template('add.php',
-    [
-        'arr_projects_and_count' => $qw_project_name_and_count,
-       ]);
+
 
 print($layout_content);
