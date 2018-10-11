@@ -7,7 +7,7 @@
  <main class="content__main">
         <h2 class="content__main-heading">Добавление задачи</h2>
 
-        <form class="form"  action="" method="post" enctype="multipart/form-data">
+        <form class="form"  action="add.php" method="post" enctype="multipart/form-data">
           <div class="form__row">
               <?php if (isset($errors['name'])){ ?>
                   <p class="form__message">
@@ -52,10 +52,10 @@
                   <select class="form__input form__input--select" name="project" id="project">
                       <?php
                       }
-                foreach ($arr_projects_name as $project_name){
+                foreach ($arr_projects as $key => $project){
                    // var_dump($project_name);
                     ?>
-                    <option value="<?=$project_name["project_name"]?>"><?=$project_name["project_name"]?></option>
+                    <option value="<?=$project["project_name"]?>"><?=$project["project_name"]?></option>
 
 
                   <?php }  ?>
