@@ -104,10 +104,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         else {
             $page_content = include_template('add.php', ['add_data' => $add_data]);
         }
-        $sql_qw_insert_form = "INSERT INTO `task` (`task_name`,  `file_link`,`date_for_task`) 
-                    VALUES ($add_data[name],  $add_data[date], $add_data[preview]) WHERE task.id_user=2";
+      /*  $sql_qw_insert_form = 'INSERT INTO `task`
+ (`id_task`, `id_user`, `id_project`, `task_name`, `creation_date`, `complete_date`, `status`, `file_link`, `date_for_task`)
+ VALUES (11, 2, 5, $add_data[name],?,?,0,?, $add_data[date], $add_data[preview]);
+ */
+  $sql_qw_insert_form = "INSERT INTO `task` (`id_task`, `id_user`, `id_project`, `task_name`, `creation_date`, `complete_date`, `status`, `file_link`, `date_for_task`) 
+VALUES ('', '2',3, ?,'2010-12-10','2019-12-10', 0, ?,'2019-11-10')";
 
-    $stmt = db_get_prepare_stmt($con ,  $sql_qw_insert_form, [$add_data['name'],  $add_data['date'], $add_data['preview']]);
+//var_dump($add_data['preview']['path']);
+    $sql_dt = [$add_data['name'], $add_data['preview']['path']];
+
+    $stmt = db_get_prepare_stmt($con, $sql_qw_insert_form, $sql_dt);
     $res_sql_qw = mysqli_stmt_execute($stmt);
 
     mysqli_query($con, $res_sql_qw);
