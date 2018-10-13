@@ -3,10 +3,6 @@ require('functions.php');
 require('mysql_helper.php');
 
 
-
-
-
-
 $con = mysqli_connect("localhost", "root", "", "doingsdone");
 
 
@@ -16,7 +12,7 @@ if ($con == false) {                        //---------- check connection
     die();
 }
 
-                                            //print("Соединение установлено");
+//print("Соединение установлено");
 
 mysqli_set_charset($con, "utf8");
 
@@ -37,28 +33,50 @@ if (!$qw_result_project_name_and_count) {                   //------ check resul
 }
 
 $qw_project_name_and_count = mysqli_fetch_all($qw_result_project_name_and_count, MYSQLI_ASSOC);
-//var_dump($qw_project_name_and_count);
+
 $add_content = include_template('add-form.php',
     [
         'arr_projects' => $qw_project_name_and_count,
         //'error_class'=> $error_class,
     ]);
 
+//----------------------------------------------------------------------- get project id
+function proj_id($arr, $proj_name)
+{
+    foreach ($arr as $key => $arr_val) {
+        foreach ($arr_val as $i => $val) {
 
+            // var_dump($i);
+            //var_dump($val);
+            // echo '</br>';
+
+            if ($proj_name == $val) {
+                return $arr_val["id_project"];
+                //var_dump($arr_val["id_project"]);
+            }
+        }
+    }
+    // die;
+}
+
+//proj_id($qw_project_name_and_count, 'Учеба');
+//var_dump(proj_id($qw_project_name_and_count, 'Учеба'));
 //----------------------------------------------------------------------- check if empty
 
 $error_class = '';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $add_data = $_POST;
-    //var_dump($add_data);
 
-    $required = ['name','project'];
+    // var_dump($add_data);
+    // die();
+
+    $required = ['name', 'project'];
     $errors = [];
 
 
-    $dict = ['name' => 'Название', 'project' => 'Проект', 'file' => ''];
+    $dict = ['name' => 'Название', 'project' => 'Проект'];
     $errors = [];
     foreach ($required as $key) {
 
@@ -75,49 +93,63 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
     }
 
+//----------------------------------------------------------------------- upload file
+
+    if (!empty($_FILES['preview']['name'])) {
+        $tmp_name = $_FILES['preview']['tmp_name'];
+        //var_dump(!empty($_FILES['preview']['name']));
+
+        $path = $_FILES['preview']['name'];
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $file_type = finfo_file($finfo, $tmp_name);
+        //var_dump($file_type);
+        if ($file_type !== "image/gif" && $file_type !== "image/jpeg" && $file_type !== "image/png") {
+            $errors['file'] = 'Загрузите картинку в формате GIF/png/jpeg';
+        } else {
+            move_uploaded_file($tmp_name, __DIR__ . '/' . $path);
+            $add_data['preview']['path'] = $path;
+            // var_dump( $add_data['preview']['path'] );
+        }
+    } else {
+        $add_data['preview']['path'] = 0;
+        $page_content = include_template('add.php', ['add_data' => $add_data]);
+    }
+
+    /*  else {
+          $errors['file'] = 'Вы не загрузили файл';
+      }
+  if (count($errors)) {
+          $page_content = include_template('add.php', ['add_data' => $add_data, 'errors' => $errors, 'dict' => $dict]);
+      }
+      else {
+          $page_content = include_template('add.php', ['add_data' => $add_data]);
+      }
+    */
+    /*  $sql_qw_insert_form = 'INSERT INTO `task`
+(`id_task`, `id_user`, `id_project`, `task_name`, `creation_date`, `complete_date`, `status`, `file_link`, `date_for_task`)
+VALUES (11, 2, 5, $add_data[name],?,?,0,?, $add_data[date], $add_data[preview]);
+*/
 
 
-        if (isset($_FILES['preview']['name'])) {
-            $tmp_name = $_FILES['preview']['tmp_name'];
-            //var_dump($tmp_name);
+    //----------------------------------------------------------------------- insert
+    //
+    //
+    $proj_name = $add_data['project'];
 
-            $path = $_FILES['preview']['name'];
+    $project_id = proj_id($qw_project_name_and_count, $proj_name);
+    //var_dump(proj_id($qw_project_name_and_count, $proj_name));
 
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $file_type = finfo_file($finfo, $tmp_name);
-            //var_dump($file_type);
-            if ($file_type !== "image/gif" && $file_type !== "image/jpeg" && $file_type !== "image/png") {
-                $errors['file'] = 'Загрузите картинку в формате GIF/png/jpeg';
-            }
-            else {
-                move_uploaded_file($tmp_name, __DIR__.'/' . $path);
-                $add_data['preview']['path'] = $path;
-              // var_dump( $add_data['preview']['path'] );
-            }
-        }
-        else {
-            $errors['file'] = 'Вы не загрузили файл';
-        }
-    if (count($errors)) {
-            $page_content = include_template('add.php', ['add_data' => $add_data, 'errors' => $errors, 'dict' => $dict]);
-        }
-        else {
-            $page_content = include_template('add.php', ['add_data' => $add_data]);
-        }
-      /*  $sql_qw_insert_form = 'INSERT INTO `task`
- (`id_task`, `id_user`, `id_project`, `task_name`, `creation_date`, `complete_date`, `status`, `file_link`, `date_for_task`)
- VALUES (11, 2, 5, $add_data[name],?,?,0,?, $add_data[date], $add_data[preview]);
- */
-  $sql_qw_insert_form = "INSERT INTO `task` (`id_task`, `id_user`, `id_project`, `task_name`, `creation_date`, `complete_date`, `status`, `file_link`, `date_for_task`) 
-VALUES ('', '2',3, ?,'2010-12-10','2019-12-10', 0, ?,'2019-11-10')";
+    $sql_qw_insert_form = "INSERT INTO `task` (`id_task`, `id_user`, `id_project`, `task_name`, `creation_date`, `complete_date`, `status`, `file_link`, `date_for_task`) 
+VALUES ('', '$project_id ',3, ?,'date()','2019-12-10', 0, ?,?)";
 
 //var_dump($add_data['preview']['path']);
-    $sql_dt = [$add_data['name'], $add_data['preview']['path']];
+    $sql_dt = [$add_data['name'], $add_data['preview']['path'], $add_data['date']];
+
 
     $stmt = db_get_prepare_stmt($con, $sql_qw_insert_form, $sql_dt);
     $res_sql_qw = mysqli_stmt_execute($stmt);
 
-    mysqli_query($con, $res_sql_qw);
 
     if (!$res_sql_qw) {                   //------ check results
         $error = mysqli_error($con);
@@ -127,23 +159,19 @@ VALUES ('', '2',3, ?,'2010-12-10','2019-12-10', 0, ?,'2019-11-10')";
     }
 
     if ($res_sql_qw) {
-
+        mysqli_query($con, $res_sql_qw);
 
         header("Location: index.php");
     }
 
 
-
-
-    }
-    else {
-        $page_content = include_template('add.php', []);
-    }
-
+} else {
+    $page_content = include_template('add.php', []);
+}
 
 
 $layout_content = include_template('layout.php',
-    [   'content' => $add_content,
+    ['content' => $add_content,
 
 
         'arr_projects_and_count' => $qw_project_name_and_count,
