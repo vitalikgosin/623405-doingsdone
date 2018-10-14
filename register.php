@@ -44,9 +44,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors = [];
 
     $email = mysqli_real_escape_string($con, $form['email']);
-    $sql = "SELECT id_user FROM users WHERE email = '$email'";
-    $res = mysqli_query($con, $sql);
-
+    $sql_check_mail = "SELECT id_user FROM users WHERE email = '$email'";
+    $res = mysqli_query($con, $sql_check_mail);
+var_dump($res);
     if (mysqli_num_rows($res) > 0) {
         $errors[] = 'Пользователь с этим email уже зарегистрирован';
     }
@@ -55,12 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $sql = 'INSERT INTO `users` (`id_user`, `registration_date`, `name`, `email`, `password`, `contacts`) 
                 VALUES ("", NOW(), ?, ?, ?, "");';
-        $stmt = db_get_prepare_stmt($con, $sql, [$form['email'], $form['name'], $password]);
+        $stmt = db_get_prepare_stmt($con, $sql, [$form['name'], $form['email'], $password]);
         $res = mysqli_stmt_execute($stmt);
     }
 
     if ($res && empty($errors)) {
-        header("Location: '.__DIR__.'/register.php");
+        header("Location: register.php");
         exit();
     }
 
