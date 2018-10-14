@@ -18,7 +18,7 @@ if ($con == false) {                        //---------- check connection
 mysqli_set_charset($con, "utf8");
 
 
-//--------------------------------------------------------------------------------------------------- count
+// count
 
 $sql_id_project_tasks = "SELECT project.project_name, project.id_project, COUNT(id_task) AS tasks_count FROM task JOIN project ON task.id_project = project.id_project WHERE task.id_user=2  GROUP BY task.id_project;";
 
@@ -35,111 +35,48 @@ if (!$qw_result_project_name_and_count) {                   //------ check resul
 
 $qw_project_name_and_count = mysqli_fetch_all($qw_result_project_name_and_count, MYSQLI_ASSOC);
 
-$add_content = include_template('register-form.php',
-    [
-        'arr_projects' => $qw_project_name_and_count,
-        //'error_class'=> $error_class,
-    ]);
+//-------------------------------------------------------------------
 
-//----------------------------------------------------------------------- get project id
-function proj_id($arr, $proj_name)
-{
-    foreach ($arr as $key => $arr_val) {
-        foreach ($arr_val as $i => $val) {
-
-            // var_dump($i);
-            //var_dump($val);
-            // echo '</br>';
-
-            if ($proj_name == $val) {
-                return $arr_val["id_project"];
-                //var_dump($arr_val["id_project"]);
-            }
-        }
-    }
-    // die;
-}
-
-//proj_id($qw_project_name_and_count, 'Учеба');
-//var_dump(proj_id($qw_project_name_and_count, 'Учеба'));
-//----------------------------------------------------------------------- check if empty
-
-$error_class = '';
+$tpl_data = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    $add_data = $_POST;
-
-    // var_dump($add_data);
-    // die();
-
-    $required = ["email", "password", "name"];
+    $form = $_POST;
     $errors = [];
 
+    $email = mysqli_real_escape_string($con, $form['email']);
+    $sql = "SELECT id_user FROM users WHERE email = '$email'";
+    $res = mysqli_query($con, $sql);
 
-    $dict = ['email' => 'email', 'password' => 'password', 'name' => "name"];
-    $errors = [];
-    foreach ($required as $key) {
+    if (mysqli_num_rows($res) > 0) {
+        $errors[] = 'Пользователь с этим email уже зарегистрирован';
+    }
+    else {
+        $password = password_hash($form['password'], PASSWORD_DEFAULT);
 
-
-        if (empty($_POST[$key])) {
-            $errors[$key] = 'Это поле надо заполнить';
-            $error_class = 'form__input--error';
-            $add_content = include_template('register-form.php',
-                [
-                    'errors' => $errors,
-                    'error_class' => $error_class,
-                    'dict' => $dict
-                ]);
-        }
+        $sql = 'INSERT INTO `users` (`id_user`, `registration_date`, `name`, `email`, `password`, `contacts`) 
+                VALUES ("", NOW(), ?, ?, ?, "");';
+        $stmt = db_get_prepare_stmt($con, $sql, [$form['email'], $form['name'], $password]);
+        $res = mysqli_stmt_execute($stmt);
     }
 
-
-//----------------------------------------------------------------------- insert
-    //
-    //
-    //$proj_name = $add_data['project'];
-
-    //$project_id = proj_id($qw_project_name_and_count, $proj_name);
-    //var_dump(proj_id($qw_project_name_and_count, $proj_name));
-
-    $sql_qw_insert_form = "INSERT INTO `users` (`id_user`, `registration_date`, `name`, `email`, `password`, `contacts`)
-VALUES ('NULL', 'date()', '?', '?', '?', 'NULL');";
-
-//var_dump($add_data['preview']['path']);
-    $sql_dt = [$add_data['name'], $add_data['email'], $add_data['password']];
-
-
-    $stmt = db_get_prepare_stmt($con, $sql_qw_insert_form, $sql_dt);
-    $res_sql_qw = mysqli_stmt_execute($stmt);
-
-
-    if (!$res_sql_qw) {                   //------ check results
-        $error = mysqli_error($con);
-        print("Ошибка MySQL: "
-            . $error);
-        die();
+    if ($res && empty($errors)) {
+        header("Location: '.__DIR__.'/register.php");
+        exit();
     }
 
-    if ($res_sql_qw) {
-        mysqli_query($con, $res_sql_qw);
-
-        //header("Location: index.php");
-    }
-
-
-} else {
-    $page_content = include_template('register.php', []);
+    $tpl_data['errors'] = $errors;
+    $tpl_data['values'] = $form;
 }
+
+$page_content = include_template('register-form.php', $tpl_data);
 
 
 $layout_content = include_template('layout.php',
-    ['content' => $add_content,
+    ['content' => $page_content,
 
 
-        'arr_projects_and_count' => $qw_project_name_and_count,
-        'title' => 'Дела в порядке add form'
+       'arr_projects_and_count' => $qw_project_name_and_count,
+        'title' => 'Дела в порядке register form'
     ]);
 print($layout_content);
-
 
