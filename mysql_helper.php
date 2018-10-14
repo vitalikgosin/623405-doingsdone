@@ -36,10 +36,7 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
         }
 
         $values = array_merge([$stmt, $types], $stmt_data);
-        echo '<pre>';
-        var_dump($values);
-        echo '</pre>';
-       // die();
+
         $func = 'mysqli_stmt_bind_param';
         $func(...$values);
 

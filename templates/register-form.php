@@ -29,19 +29,27 @@
 
             <div class="form__row">
               <label class="form__label" for="password">Пароль <sup>*</sup></label>
+                <?php if (isset($errors['password'])) {?>
 
-              <input class="form__input" type="password" name="password" id="password" value="" placeholder="Введите пароль">
-                <?php if (isset($errors)){?>
+              <input class="form__input form__input--error" type="password" name="password" id="password" value="" placeholder="Введите пароль">
+                <p class="form__message">Это поле надо заполнить</p>
+               <? }
+                else{?>
+                    <input class="form__input" type="password" name="password" id="password" value="" placeholder="Введите пароль">
 
-                <?php
-
+               <? }
                 ?>
             </div>
 
             <div class="form__row">
               <label class="form__label" for="name">Имя <sup>*</sup></label>
-
-              <input class="form__input" type="password" name="name" id="name" value="" placeholder="Введите пароль">
+                <?php if (isset($errors['name'])) {?>
+              <input class="form__input form__input--error" type="password" name="name" id="name" value="" placeholder="Введите пароль">
+                <p class="form__message">Это поле надо заполнить</p>
+                <? }
+                else{?>
+                <input class="form__input" type="password" name="name" id="name" value="" placeholder="Введите пароль">
+                    <? }?>
             </div>
 
             <div class="form__row form__row--controls">
