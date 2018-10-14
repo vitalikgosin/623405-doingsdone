@@ -42,11 +42,38 @@ $tpl_data = [];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
     $errors = [];
+
+    //----------------------------------------------------------------------- check if empty
+
+    $error_class = '';
+
+        $required = ['name', 'email', 'password'];
+        $errors = [];
+
+
+        $dict = ['name' => 'Название', 'password' => 'password', 'email' =>'email'];
+        $errors = [];
+        foreach ($required as $key) {
+
+
+            if (empty($_POST[$key])) {
+                $errors[$key] = 'Это поле надо заполнить';
+                $error_class = 'form__input--error';
+               /* $add_content = include_template('register-form.php',
+                    [
+                        'errors' => $errors,
+                        'error_class' => $error_class,
+                        'dict' => $dict
+                    ]);
+               */
+            }
+        }
+
 //----------------------------------------------------------------------------------------------email
     $email = mysqli_real_escape_string($con, $form['email']);
     $sql_check_mail = "SELECT id_user FROM users WHERE email = '$email'";
     $res = mysqli_query($con, $sql_check_mail);
-var_dump($res);
+//var_dump($res);
     if (mysqli_num_rows($res) > 0) {
         $errors[] = 'Пользователь с этим email уже зарегистрирован';
     }

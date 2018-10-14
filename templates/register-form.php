@@ -31,6 +31,11 @@
               <label class="form__label" for="password">Пароль <sup>*</sup></label>
 
               <input class="form__input" type="password" name="password" id="password" value="" placeholder="Введите пароль">
+                <?php if (isset($errors)){?>
+
+                <?php
+
+                ?>
             </div>
 
             <div class="form__row">
