@@ -16,9 +16,15 @@
             <div class="form__row">
               <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
+                <?php if (isset($errors)){?>
               <input class="form__input form__input--error" type="text" name="email" id="email" value="" placeholder="Введите e-mail">
 
               <p class="form__message">E-mail введён некорректно</p>
+                <?php }
+                else{ ?>
+                <input class="form__input " type="text" name="email" id="email" value="" placeholder="Введите e-mail">
+
+               <?php } ?>
             </div>
 
             <div class="form__row">
@@ -34,8 +40,9 @@
             </div>
 
             <div class="form__row form__row--controls">
+                <?php if (isset($errors)){?>
               <p class="error-message">Пожалуйста, исправьте ошибки в форме</p>
-
+                <?php }?>
               <input class="button" type="submit" name="" value="Зарегистрироваться">
             </div>
           </form>

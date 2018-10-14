@@ -18,7 +18,7 @@ if ($con == false) {                        //---------- check connection
 mysqli_set_charset($con, "utf8");
 
 
-// count
+//----------------------------------------------------------------------- count
 
 $sql_id_project_tasks = "SELECT project.project_name, project.id_project, COUNT(id_task) AS tasks_count FROM task JOIN project ON task.id_project = project.id_project WHERE task.id_user=2  GROUP BY task.id_project;";
 
@@ -42,7 +42,7 @@ $tpl_data = [];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
     $errors = [];
-
+//----------------------------------------------------------------------------------------------email
     $email = mysqli_real_escape_string($con, $form['email']);
     $sql_check_mail = "SELECT id_user FROM users WHERE email = '$email'";
     $res = mysqli_query($con, $sql_check_mail);
@@ -60,14 +60,14 @@ var_dump($res);
     }
 
     if ($res && empty($errors)) {
-        header("Location: register.php");
+        header("Location: index.php");
         exit();
     }
 
     $tpl_data['errors'] = $errors;
     $tpl_data['values'] = $form;
 }
-
+//-----------------------------------------------------------------------------------
 $page_content = include_template('register-form.php', $tpl_data);
 
 
