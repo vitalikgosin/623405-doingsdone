@@ -84,89 +84,116 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (empty($_POST[$key])) {
             $errors[$key] = 'Это поле надо заполнить';
             $error_class = 'form__input--error';
-            $add_content = include_template('add-form.php',
-                [
-                    'errors' => $errors,
-                    'error_class' => $error_class,
-                    'dict' => $dict
-                ]);
+
         }
+
     }
+
 
 //----------------------------------------------------------------------- upload file
 
     if (!empty($_FILES['preview']['name'])) {
         $tmp_name = $_FILES['preview']['tmp_name'];
-        //var_dump(!empty($_FILES['preview']['name']));
 
-        $path = $_FILES['preview']['name'];
+
+       // $path = $_FILES['preview']['name'];
+
+        //uniq id  as file name
+        // set file extantion buy MIME_TYPE
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
+
         $file_type = finfo_file($finfo, $tmp_name);
+        //$f_type  = $_FILES['preview']['type'];
+
+        $f_type = explode("/", $file_type);
+
+
+        //var_dump( $f_type[1]);
+        //die();
+
+        $filename = uniqid() .'.'. $f_type[1];
+        //var_dump($filename);
+
         //var_dump($file_type);
         if ($file_type !== "image/gif" && $file_type !== "image/jpeg" && $file_type !== "image/png") {
             $errors['file'] = 'Загрузите картинку в формате GIF/png/jpeg';
         } else {
-            move_uploaded_file($tmp_name, __DIR__ . '/' . $path);
-            $add_data['preview']['path'] = $path;
+            move_uploaded_file($tmp_name, __DIR__ . '/' .  $filename);
+            $add_data['preview']['path'] = $filename;
             // var_dump( $add_data['preview']['path'] );
         }
-    } else {
-        $add_data['preview']['path'] = 0;
+    }
+    /*
+  else {
+      $add_data['preview']['path'] = 0;
+      $page_content = include_template('add.php', ['add_data' => $add_data]);
+  }
+
+  /*  else      $errors['file'] = 'Вы не загрузили файл';
+    }
+if (count($errors)) {
+        $page_content = include_template('add.php', ['add_data' => $add_data, 'errors' => $errors, 'dict' => $dict]);
+    }
+    else {
         $page_content = include_template('add.php', ['add_data' => $add_data]);
     }
-
-    /*  else {
-          $errors['file'] = 'Вы не загрузили файл';
-      }
-  if (count($errors)) {
-          $page_content = include_template('add.php', ['add_data' => $add_data, 'errors' => $errors, 'dict' => $dict]);
-      }
-      else {
-          $page_content = include_template('add.php', ['add_data' => $add_data]);
-      }
-    */
+  */
     /*  $sql_qw_insert_form = 'INSERT INTO `task`
 (`id_task`, `id_user`, `id_project`, `task_name`, `creation_date`, `complete_date`, `status`, `file_link`, `date_for_task`)
 VALUES (11, 2, 5, $add_data[name],?,?,0,?, $add_data[date], $add_data[preview]);
 */
+    if (!empty($errors)) {
+        $add_content = include_template('add-form.php',
+            [
+                'errors' => $errors,
+                'error_class' => $error_class,
+                'dict' => $dict,
+                'arr_projects' => $qw_project_name_and_count,
+            ]);
 
+    }
+    else {
+        //----------------------------------------------------------------------- insert
+        //
+        //
+        $proj_name = $add_data['project'];
 
-    //----------------------------------------------------------------------- insert
-    //
-    //
-    $proj_name = $add_data['project'];
+        $project_id = proj_id($qw_project_name_and_count, $proj_name);
+        //var_dump(proj_id($qw_project_name_and_count, $proj_name));
 
-    $project_id = proj_id($qw_project_name_and_count, $proj_name);
-    //var_dump(proj_id($qw_project_name_and_count, $proj_name));
-
-    $sql_qw_insert_form = "INSERT INTO `task` (`id_task`, `id_user`, `id_project`, `task_name`, `creation_date`, `complete_date`, `status`, `file_link`, `date_for_task`) 
-VALUES ('', '$project_id ',3, ?,'date()','2019-12-10', 0, ?,?)";
+        $sql_qw_insert_form = "INSERT INTO `task` ( `id_user`, `id_project`, `task_name`, `creation_date`,`status`, `file_link`, `date_for_task`) 
+VALUES (?, ?, ?, NOW(), 0, ?,?)";
 
 //var_dump($add_data['preview']['path']);
-    $sql_dt = [$add_data['name'], $add_data['preview']['path'], $add_data['date']];
+       if($add_data['preview']['path'] === ''){
+           $add_data['preview']['path'] = '';
+       }
+
+        $sql_dt = [2, $project_id, $add_data['name'], $add_data['preview']['path'], $add_data['date']];
 
 
-    $stmt = db_get_prepare_stmt($con, $sql_qw_insert_form, $sql_dt);
-    $res_sql_qw = mysqli_stmt_execute($stmt);
+        $stmt = db_get_prepare_stmt($con, $sql_qw_insert_form, $sql_dt);
+        $res_sql_qw = mysqli_stmt_execute($stmt);
 
 
-    if (!$res_sql_qw) {                   //------ check results
-        $error = mysqli_error($con);
-        print("Ошибка MySQL: "
-            . $error);
+        if (!$res_sql_qw) {                   //------ check results
+            $error = mysqli_error($con);
+            print("Ошибка MySQL: "
+                . $error);
+            die();
+        }
+
+
+
+            header("Location: index.php");
         die();
+
+
     }
-
-    if ($res_sql_qw) {
-        mysqli_query($con, $res_sql_qw);
-
-        header("Location: index.php");
-    }
-
 
 } else {
-    $page_content = include_template('add.php', []);
+    $add_content = include_template('add-form.php', ['arr_projects' => $qw_project_name_and_count,]);
 }
 
 
