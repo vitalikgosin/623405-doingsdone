@@ -34,11 +34,6 @@ if (!$qw_result_project_name_and_count) {                   //------ check resul
 
 $qw_project_name_and_count = mysqli_fetch_all($qw_result_project_name_and_count, MYSQLI_ASSOC);
 
-$add_content = include_template('add-form.php',
-    [
-        'arr_projects' => $qw_project_name_and_count,
-        //'error_class'=> $error_class,
-    ]);
 
 //----------------------------------------------------------------------- get project id
 function proj_id($arr, $proj_name)
@@ -124,12 +119,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // var_dump( $add_data['preview']['path'] );
         }
     }
-    /*
-  else {
-      $add_data['preview']['path'] = 0;
-      $page_content = include_template('add.php', ['add_data' => $add_data]);
-  }
 
+    else {
+          $add_data['preview']['path'] = '';
+          //$page_content = include_template('add.php', ['add_data' => $add_data]);
+      }
+ /*
   /*  else      $errors['file'] = 'Вы не загрузили файл';
     }
 if (count($errors)) {
@@ -166,9 +161,7 @@ VALUES (11, 2, 5, $add_data[name],?,?,0,?, $add_data[date], $add_data[preview]);
 VALUES (?, ?, ?, NOW(), 0, ?,?)";
 
 //var_dump($add_data['preview']['path']);
-       if($add_data['preview']['path'] === ''){
-           $add_data['preview']['path'] = '';
-       }
+       
 
         $sql_dt = [2, $project_id, $add_data['name'], $add_data['preview']['path'], $add_data['date']];
 
