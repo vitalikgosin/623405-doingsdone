@@ -16,7 +16,7 @@
             <div class="form__row">
               <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
-                <?php if (isset($errors)){?>
+                <?php if (isset($errors['email'])){?>
               <input class="form__input form__input--error" type="text" name="email" id="email" value="" placeholder="Введите e-mail">
 
               <p class="form__message">E-mail введён некорректно</p>
@@ -55,6 +55,9 @@
             <div class="form__row form__row--controls">
                 <?php if (isset($errors)){?>
               <p class="error-message">Пожалуйста, исправьте ошибки в форме</p>
+                <?php }?>
+                <?php if (isset($errors['email_exist'])){?>
+                    <p class="error-message">Пользователь с этим email уже зарегистрирован</p>
                 <?php }?>
               <input class="button" type="submit" name="" value="Зарегистрироваться">
             </div>

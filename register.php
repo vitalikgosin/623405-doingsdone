@@ -45,14 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     //----------------------------------------------------------------------- check if empty
 
-    $error_class = '';
+    //$error_class = '';
 
         $required = ['name', 'email', 'password'];
-        $errors = [];
 
 
         $dict = ['name' => 'Название', 'password' => 'password', 'email' =>'email'];
-        $errors = [];
+
         foreach ($required as $key) {
 
 
@@ -72,24 +71,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 //----------------------------------------------------------------------------------------------email
     $email = mysqli_real_escape_string($con, $form['email']);
     $sql_check_mail = "SELECT id_user FROM users WHERE email = '$email'";
+
+
     $res = mysqli_query($con, $sql_check_mail);
-//var_dump($res);
-    if (mysqli_num_rows($res) > 0) {
-        $errors[] = 'Пользователь с этим email уже зарегистрирован';
+
+    if (!$res) {                   //------ check results
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: "
+            . $error);
+        die();
     }
-    else {
+//var_dump($res);
+    if (mysqli_num_rows($res) > 0 ) {
+        $errors['email_exist'] = 1;
+    }
+    else if (empty($errors)){
         $password = password_hash($form['password'], PASSWORD_DEFAULT);
 
         $sql = 'INSERT INTO `users` (`id_user`, `registration_date`, `name`, `email`, `password`, `contacts`) 
                 VALUES ("", NOW(), ?, ?, ?, "");';
         $stmt = db_get_prepare_stmt($con, $sql, [$form['name'], $form['email'], $password]);
         $res = mysqli_stmt_execute($stmt);
-    }
 
-    if ($res && empty($errors)) {
         header("Location: index.php");
         exit();
     }
+
+   /* if ($res && empty($errors)) {
+
+    }*/
 
     $tpl_data['errors'] = $errors;
     $tpl_data['values'] = $form;
