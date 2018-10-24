@@ -1,7 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vitaly
- * Date: 14/10/2018
- * Time: 16:12
- */
+session_start();
+
+
+if (isset($_SESSION)) {
+    $_SESSION = [];
+    header("Location: index.php");
+    exit();
+}

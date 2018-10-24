@@ -31,29 +31,48 @@ function count_tasks( $project_id, array $arr_tasks){
 
 <div class="page-wrapper">
     <div class="container container--with-sidebar">
-        <header class="main-header">
-            <a href="/">
-                <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
-            </a>
 
-            <div class="main-header__side">
-                <a class="main-header__side-item button button--plus open-modal" href="pages/form-task.html">Добавить
-                    задачу</a>
+        <?php
 
-                <div class="main-header__side-item user-menu">
-                    <div class="user-menu__image">
-                        <img src="img/user-pic.jpg" width="40" height="40" alt="Пользователь">
-                    </div>
+        if (isset($_SESSION['user'])) {
 
-                    <div class="user-menu__data">
-                        <p>Константин</p>
+            ?>
+            <header class="main-header">
+                <a href="/">
+                    <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
+                </a>
 
-                        <a href="#">Выйти</a>
+                <div class="main-header__side">
+                    <a class="main-header__side-item button button--plus open-modal" href="add.php">Добавить
+                        задачу</a>
+
+                    <div class="main-header__side-item user-menu">
+                        <div class="user-menu__image">
+                            <img src="img/user-pic.jpg" width="40" height="40" alt="Пользователь">
+                        </div>
+
+                        <div class="user-menu__data">
+                            <p>Константин</p>
+
+                            <a href="logout.php">Выйти</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
+            </header>
 
+
+      <?php }
+        else {?>
+            <header class="main-header">
+                <a href="#">
+                    <img src="img/logo.png" width="153" height="42" alt="Логитип Дела в порядке">
+                </a>
+
+                <div class="main-header__side">
+                    <a class="main-header__side-item button button--transparent" href="auth.php">Войти</a>
+                </div>
+            </header>
+<?php } ?>
         <div class="content">
             <section class="content__side">
                 <h2 class="content__side-heading">Проекты</h2>

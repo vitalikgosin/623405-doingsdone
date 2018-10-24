@@ -1,6 +1,6 @@
 <?php
 require('functions.php');
-
+session_start();
 
 $con = mysqli_connect("localhost", "root", "", "doingsdone");
 
@@ -77,26 +77,29 @@ if (isset($_GET['project_id'])) {
 
 
 // -------------------------------------------------print tasks
+    if (isset($_SESSION['user'])) {
 
+        $id_user = $_SESSION['user']['id_user'];
+        $sql_tasks = "SELECT * FROM task WHERE id_user =  '$id_user';";
 
-    $sql_tasks = "SELECT * FROM task WHERE id_user = 2;";
+        $result_tasks = mysqli_query($con, $sql_tasks);
 
-    $result_tasks = mysqli_query($con, $sql_tasks);
+        if (!$result_tasks) {                   //------ check results
+            $error = mysqli_error($con);
+            print("Ошибка MySQL: "
+                . $error);
+            die();
+        }
 
-    if (!$result_tasks) {                   //------ check results
-        $error = mysqli_error($con);
-        print("Ошибка MySQL: "
-            . $error);
-        die();
+        $rows_tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
+
+        $index_content = include_template('index.php', ['arr_tasks' => $rows_tasks, 'show_complete_tasks' => $show_complete_tasks]);
+
+    } else {
+        $index_content = include_template('guest.php',[]);
+
     }
-
-    $rows_tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
-
-    $index_content = include_template('index.php', ['arr_tasks' => $rows_tasks, 'show_complete_tasks' => $show_complete_tasks]);
-
 }
-
-
 // count
 
 $sql_id_project_tasks = "SELECT project.project_name, project.id_project, COUNT(id_task) AS tasks_count FROM task JOIN project ON task.id_project = project.id_project WHERE task.id_user=2  GROUP BY task.id_project;";
@@ -121,7 +124,7 @@ $qw_project_name_and_count = mysqli_fetch_all($qw_result_project_name_and_count,
 $layout_content = include_template('layout.php',
     ['content' => $index_content,
         //'arr_projects' => $rows_projects,
-        'arr_tasks' => $rows_tasks,
+        //'arr_tasks' => $rows_tasks,
         'arr_projects_and_count' => $qw_project_name_and_count,
         'title' => 'Дела в порядке']);
 

@@ -1,7 +1,11 @@
 <?php
 require('functions.php');
 require('mysql_helper.php');
-
+session_start();
+if (!isset($_SESSION['user'])) {
+    header("Location: guest.php");
+    exit();
+}
 
 $con = mysqli_connect("localhost", "root", "", "doingsdone");
 
@@ -161,9 +165,15 @@ VALUES (11, 2, 5, $add_data[name],?,?,0,?, $add_data[date], $add_data[preview]);
 VALUES (?, ?, ?, NOW(), 0, ?,?)";
 
 //var_dump($add_data['preview']['path']);
-       
+        if (!isset($_SESSION['user'])) {
+            $id_user=0;
+        }
+        else{
+            $id_user = ($_SESSION['user']["id_user"]);
 
-        $sql_dt = [2, $project_id, $add_data['name'], $add_data['preview']['path'], $add_data['date']];
+        }
+
+        $sql_dt = [ $id_user, $project_id, $add_data['name'], $add_data['preview']['path'], $add_data['date']];
 
 
         $stmt = db_get_prepare_stmt($con, $sql_qw_insert_form, $sql_dt);

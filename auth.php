@@ -55,10 +55,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $res = mysqli_query($con, $sql);
 
     $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
-//var_dump($user);
+
     if (!count($errors) and $user) {
+
         if (password_verify($form['password'], $user['password'])) {
             $_SESSION['user'] = $user;
+
+
         }
         else {
             $errors['password'] = 'Неверный пароль';
@@ -69,24 +72,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (count($errors)) {
-        $page_content = include_template('authorization-form.php', ['form' => $form, 'errors' => $errors]);
+        $page_content = include_template('auth.php', ['form' => $form, 'errors' => $errors]);
     }
     else {
-        header("Location: authorization-form.php");
+        header("Location: auth.php");
         exit();
     }
 }
 else {
     if (isset($_SESSION['user'])) {
-        $page_content = include_template('welcome.php', ['username' => $_SESSION['user']['name']]);
+        header("Location: index.php");
+        exit();
     }
     else {
-        $page_content = include_template('authorization-form.php', []);
+        $page_content = include_template('auth.php', []);
     }
 }
-
 $layout_content = include_template('layout.php', [
     'content'    => $page_content,
+    //'username' => $_SESSION['user']['name'],
     'arr_projects_and_count' => $qw_project_name_and_count,
     //'categories' => [],
     'title'      => 'authorization'
